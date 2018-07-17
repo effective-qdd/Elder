@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{CEF460BA-52AD-456A-ABE9-23205AFEE1C3}</ProjectGuid>
+    <RootNamespace>Elder</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <AdditionalIncludeDirectories>ThirdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>
+      </OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>ThirdPartyLibs</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>ThirdPartyLibs</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>ThirdPartyLibs</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkGainRef.cpp" />
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkRef.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Definition\Definitions.h" />
+    <ClInclude Include="Enumeration\Enums.h" />
+    <ClInclude Include="Exception\Exception.hpp" />
+    <ClInclude Include="File\Avi.hpp" />
+    <ClInclude Include="File\File.hpp" />
+    <ClInclude Include="File\FileBase.hpp" />
+    <ClInclude Include="File\Mrc.hpp" />
+    <ClInclude Include="File\Picture.hpp" />
+    <ClInclude Include="File\Ref.hpp" />
+    <ClInclude Include="File\Seq.hpp" />
+    <ClInclude Include="File\Stack.hpp" />
+    <ClInclude Include="File\Tif.hpp" />
+    <ClInclude Include="File\Video.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageAlgorithmBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageBadPixelCorrection.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageCorrectionBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFFT.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterBilateral.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterGaussian.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterHighPass.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterLaplace.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterLowPass.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterMaximum.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterMean.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterMedian.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterMinimum.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityAccumulation.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityAverage.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityContrastBrightness.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityGamma.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityHistogramEqual.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityHistogramLocal.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityLinear.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityLog.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityNegative.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityPiecewiseLinear.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageIntensityThreshold.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyClose.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyDilate.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyErode.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyOpen.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageTransformBase.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageTransformBinning.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageTransformFlip.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageTransformRotation.hpp" />
+    <ClInclude Include="ImageOperator\ImageAdd.hpp" />
+    <ClInclude Include="ImageOperator\ImageAddConstant.hpp" />
+    <ClInclude Include="ImageOperator\ImageConvert.hpp" />
+    <ClInclude Include="ImageOperator\ImageConvertCrop.hpp" />
+    <ClInclude Include="ImageOperator\ImageConvertROI.hpp" />
+    <ClInclude Include="ImageOperator\ImageCopy.hpp" />
+    <ClInclude Include="ImageOperator\ImageCopyCrop.hpp" />
+    <ClInclude Include="ImageOperator\ImageCopyROI.hpp" />
+    <ClInclude Include="ImageOperator\ImageDiv.hpp" />
+    <ClInclude Include="ImageOperator\ImageDivConstant.hpp" />
+    <ClInclude Include="ImageOperator\ImageMeanStdDev.hpp" />
+    <ClInclude Include="ImageOperator\ImageMin.hpp" />
+    <ClInclude Include="ImageOperator\ImageMul.hpp" />
+    <ClInclude Include="ImageOperator\ImageMulConstant.hpp" />
+    <ClInclude Include="ImageOperator\ImageSetConstant.hpp" />
+    <ClInclude Include="ImageOperator\ImageSub.hpp" />
+    <ClInclude Include="ImageOperator\ImageSubConstant.hpp" />
+    <ClInclude Include="ImageProcessor\ImageProcessor.hpp" />
+    <ClInclude Include="Image\Image.hpp" />
+    <ClInclude Include="Image\ImageBase.hpp" />
+    <ClInclude Include="Image\ImageIPPI.hpp" />
+    <ClInclude Include="Image\ImagePool.hpp" />
+    <ClInclude Include="Logger\Logger.hpp" />
+    <ClInclude Include="NonCopyable\NonCopyable.hpp" />
+    <ClInclude Include="Singleton\Singleton.hpp" />
+    <ClInclude Include="Structure\Structs.h" />
+    <ClInclude Include="Timer\Timer.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

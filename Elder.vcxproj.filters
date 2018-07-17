@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="NonCopyable">
+      <UniqueIdentifier>{2c75c81a-3971-49cd-8607-e70f81ca54a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Definition">
+      <UniqueIdentifier>{ab9480b4-da19-4b5d-bbbe-b368a044acb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enumeration">
+      <UniqueIdentifier>{194273d7-6565-497a-97a5-0e012e1de339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structure">
+      <UniqueIdentifier>{46de5c1f-b4cb-46c5-8229-2bfdf5a89d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{1a897486-0c04-4f38-bc37-9c317218fbc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{7427e748-374f-4afd-9126-4b55c2b7f177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton">
+      <UniqueIdentifier>{73ff3056-7e01-442c-aa7d-144f5da2bb81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{2378294b-54d4-437f-9132-cb8c42dcaa12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{1c6e6996-0c56-42b5-8e69-352a3dbd976a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImageAlgorithm">
+      <UniqueIdentifier>{a3fcf2bd-9c5a-494d-b6bc-a54b13121cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImageOperator">
+      <UniqueIdentifier>{f685bd5c-d33e-4573-adde-c75163a5576b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImageProcessor">
+      <UniqueIdentifier>{a402c1fb-f8f9-4d07-b4f3-dc1479733938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File">
+      <UniqueIdentifier>{51c66c69-84ba-4377-806c-5a7bf4baf509}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkRef.cpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkGainRef.cpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NonCopyable\NonCopyable.hpp">
+      <Filter>NonCopyable</Filter>
+    </ClInclude>
+    <ClInclude Include="Definition\Definitions.h">
+      <Filter>Definition</Filter>
+    </ClInclude>
+    <ClInclude Include="Enumeration\Enums.h">
+      <Filter>Enumeration</Filter>
+    </ClInclude>
+    <ClInclude Include="Structure\Structs.h">
+      <Filter>Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception\Exception.hpp">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\Logger.hpp">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton\Singleton.hpp">
+      <Filter>Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer\Timer.hpp">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Image\ImageIPPI.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Image\ImagePool.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Image\Image.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Image\ImageBase.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageMul.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageMulConstant.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageSetConstant.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageSub.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageSubConstant.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageAdd.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageAddConstant.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageConvert.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageConvertCrop.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageConvertROI.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageCopy.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageCopyCrop.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageDiv.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageDivConstant.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageMin.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageProcessor\ImageProcessor.hpp">
+      <Filter>ImageProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Seq.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Stack.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Tif.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Video.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Avi.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\File.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\FileBase.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Mrc.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Picture.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\Ref.hpp">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageMeanStdDev.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityAverage.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityContrastBrightness.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityGamma.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityHistogramEqual.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityHistogramLocal.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityLinear.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityLog.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityNegative.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityPiecewiseLinear.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityThreshold.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageTransformBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageTransformBinning.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageTransformFlip.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageTransformRotation.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageAlgorithmBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageBadPixelCorrection.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFFT.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterGaussian.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterMean.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterMedian.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageIntensityAccumulation.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageCorrectionBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterLaplace.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterBilateral.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterHighPass.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterLowPass.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterMaximum.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterMinimum.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageOperator\ImageCopyROI.hpp">
+      <Filter>ImageOperator</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyBase.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyDilate.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyErode.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyOpen.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageMorphologyClose.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
