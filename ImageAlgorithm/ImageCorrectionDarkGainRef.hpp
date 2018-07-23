@@ -12,7 +12,6 @@
 #ifndef _IMAGE_CORRECTION_DARK_GAIN_REF_H
 #define _IMAGE_CORRECTION_DARK_GAIN_REF_H
 
-
 // My Class Includes
 #include "ImageCorrectionBase.hpp"
 #include "../ImageOperator/ImageConvert.hpp"
@@ -21,25 +20,24 @@
 #include "../ImageOperator/ImageMul.hpp"
 #include "../ImageOperator/ImageCopy.hpp"
 
-
 namespace ELDER
 {
 	namespace ALGORITHM
 	{
 		namespace CORRECTION
 		{
-			/// \brief CDarkGainRefCorrection
-			class CCorrectionDarkGainRef : public ICorrection
+			/// \brief CDarkGainRef
+			class CDarkGainRef : public ICorrection
 			{
 			public:
-				CCorrectionDarkGainRef()
+				CDarkGainRef()
 					: ICorrection()
-					, m_darkRef32f1c(nullptr)
-					, m_gainRef32f1c(nullptr)
+					, m_darkRefImage32f1c(std::make_shared<CImage32f1cIPPI>())
+					, m_gainRefImage32f1c(std::make_shared<CImage32f1cIPPI>())
 					, m_tmpImage32f1c(std::make_shared<CImage32f1cIPPI>())
 				{}
 
-				virtual ~CCorrectionDarkGainRef() = default;
+				virtual ~CDarkGainRef() = default;
 
 				virtual void Initialize(Size imageSize)
 				{
@@ -47,37 +45,69 @@ namespace ELDER
 					{
 						m_imageSize = imageSize;
 						m_tmpImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_darkRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_gainRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
 					}
 				}
 
-				virtual void SetReferences(std::shared_ptr<CImage32f1cIPPI> const& darkRef, std::shared_ptr<CImage32f1cIPPI> const& gainRef)
+				virtual void SetReferences(float const*const darkRefImage, float const*const gainRefImage)
 				{
-					ASSERT_LOG(darkRef != nullptr, "Dark Ref image is null");
-					ASSERT_LOG(gainRef != nullptr, "Gain Ref image is null");
-					m_darkRef32f1c = darkRef;
-					m_gainRef32f1c = gainRef;
+					ASSERT_LOG(darkRefImage != nullptr, "Dark Ref image is null");
+					ASSERT_LOG(gainRefImage != nullptr, "Gain Ref image is null");
+					ASSERT_LOG(m_darkRefImage32f1c != nullptr, "m_darkRefImage32f1c is null");
+					ASSERT_LOG(m_gainRefImage32f1c != nullptr, "m_gainRefImage32f1c is null");
+					auto status = ippiCopy_32f_C1R
+					(
+						darkRefImage,
+						m_imageSize.width * sizeof(float),
+						m_darkRefImage32f1c->Data(),
+						m_darkRefImage32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height }
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiCopy_32f_C1R failed!");
+
+					status = ippiCopy_32f_C1R
+					(
+						gainRefImage,
+						m_gainRefImage32f1c->WidthBytes(),
+						m_gainRefImage32f1c->Data(),
+						m_gainRefImage32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height }
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiCopy_32f_C1R failed!");
 				}
 
 				virtual bool Apply(std::any const&, std::any const&) { return true; };
 
 			protected:
-				std::shared_ptr<CImage32f1cIPPI> m_darkRef32f1c;
-				std::shared_ptr<CImage32f1cIPPI> m_gainRef32f1c;
+				std::shared_ptr<CImage32f1cIPPI> m_darkRefImage32f1c;
+				std::shared_ptr<CImage32f1cIPPI> m_gainRefImage32f1c;
 				std::shared_ptr<CImage32f1cIPPI> m_tmpImage32f1c;
 				Size m_imageSize;
 				std::mutex	m_mutex;
 			};
 
 
-			/// \brief CCorrectionDarkGainRef8u1c
-			class CCorrectionDarkGainRef8u1c : public CCorrectionDarkGainRef
+			/// \brief CDarkGainRef8u1c
+			class CDarkGainRef8u1c : public CDarkGainRef
 			{
 			public:
-				CCorrectionDarkGainRef8u1c()
-					: CCorrectionDarkGainRef()
+				CDarkGainRef8u1c()
+					: CDarkGainRef()
 				{}
 
-				~CCorrectionDarkGainRef8u1c() = default;
+				~CDarkGainRef8u1c() = default;
+
+				void Initialize(Size imageSize) override
+				{
+					if (m_imageSize != imageSize)
+					{
+						m_imageSize = imageSize;
+						m_tmpImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_darkRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_gainRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+					}
+				}
 
 				bool Apply(std::any const& imageIn, std::any const& imageOut) override
 				{
@@ -94,8 +124,8 @@ namespace ELDER
 
 					std::lock_guard<std::mutex> lock(m_mutex);
 					OPERATOR::CImageConvert<OPERATOR::CConvert8u1cTo32f1c>::Convert(src, m_tmpImage32f1c);
-					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(m_tmpImage32f1c, m_darkRef32f1c);
-					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(m_tmpImage32f1c, m_gainRef32f1c);
+					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(m_tmpImage32f1c, m_darkRefImage32f1c);
+					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(m_tmpImage32f1c, m_gainRefImage32f1c);
 					//OPERATOR::CImageAddConstant<OPERATOR::CAddConstant32f1c>::AddConstant(m_tmpImage32f1c, 0.5f);
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo8u1c>::Convert(m_tmpImage32f1c, dst);
 
@@ -105,15 +135,26 @@ namespace ELDER
 
 
 
-			/// \brief CCorrectionDarkGainRef16u1c
-			class CCorrectionDarkGainRef16u1c : public CCorrectionDarkGainRef
+			/// \brief CDarkGainRef16u1c
+			class CDarkGainRef16u1c : public CDarkGainRef
 			{
 			public:
-				CCorrectionDarkGainRef16u1c()
-					: CCorrectionDarkGainRef()
+				CDarkGainRef16u1c()
+					: CDarkGainRef()
 				{}
 
-				~CCorrectionDarkGainRef16u1c() = default;
+				~CDarkGainRef16u1c() = default;
+
+				void Initialize(Size imageSize) override
+				{
+					if (m_imageSize != imageSize)
+					{
+						m_imageSize = imageSize;
+						m_tmpImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_darkRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_gainRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+					}
+				}
 
 				bool Apply(std::any const& imageIn, std::any const& imageOut) override
 				{
@@ -130,8 +171,8 @@ namespace ELDER
 
 					std::lock_guard<std::mutex> lock(m_mutex);
 					OPERATOR::CImageConvert<OPERATOR::CConvert16u1cTo32f1c>::Convert(src, m_tmpImage32f1c);
-					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(m_tmpImage32f1c, m_darkRef32f1c);
-					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(m_tmpImage32f1c, m_gainRef32f1c);
+					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(m_tmpImage32f1c, m_darkRefImage32f1c);
+					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(m_tmpImage32f1c, m_gainRefImage32f1c);
 					//OPERATOR::CImageAddConstant<OPERATOR::CAddConstant32f1c>::AddConstant(m_tmpImage32f1c, 0.5f);
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_tmpImage32f1c, dst);
 
@@ -140,19 +181,24 @@ namespace ELDER
 			};
 
 
-			/// \brief CCorrectionDarkGainRef32f1c
-			class CCorrectionDarkGainRef32f1c : public CCorrectionDarkGainRef
+			/// \brief CDarkGainRef32f1c
+			class CDarkGainRef32f1c : public CDarkGainRef
 			{
 			public:
-				CCorrectionDarkGainRef32f1c()
-					: CCorrectionDarkGainRef()
+				CDarkGainRef32f1c()
+					: CDarkGainRef()
 				{}
 
-				~CCorrectionDarkGainRef32f1c() = default;
+				~CDarkGainRef32f1c() = default;
 
 				void Initialize(Size imageSize) override
 				{
-					m_imageSize = imageSize;
+					if (m_imageSize != imageSize)
+					{
+						m_imageSize = imageSize;
+						m_darkRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+						m_gainRefImage32f1c->Initialize(m_imageSize.width, m_imageSize.height, nullptr);
+					}
 				}
 
 				bool Apply(std::any const& imageIn, std::any const& imageOut) override
@@ -170,8 +216,8 @@ namespace ELDER
 
 					std::lock_guard<std::mutex> lock(m_mutex);
 					//OPERATOR::CImageCopy<OPERATOR::CCopy32f1c>::Copy(m_tmpImage32f1c, src);
-					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(dst, src, m_darkRef32f1c);
-					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(dst, m_gainRef32f1c);
+					OPERATOR::CImageSub<OPERATOR::CSub32f1c>::Sub(dst, src, m_darkRefImage32f1c);
+					OPERATOR::CImageMul<OPERATOR::CMul32f1c>::Mul(dst, m_gainRefImage32f1c);
 					//OPERATOR::CImageAddConstant<OPERATOR::CAddConstant32f1c>::AddConstant(m_tmpImage32f1c, 0.5f);
 					//OPERATOR::CImageCopy<OPERATOR::CCopy32f1c>::Copy(dst, m_tmpImage32f1c);
 

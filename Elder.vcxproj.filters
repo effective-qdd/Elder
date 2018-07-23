@@ -53,10 +53,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkRef.cpp">
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkRef.hpp">
       <Filter>ImageAlgorithm</Filter>
     </ClCompile>
-    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkGainRef.cpp">
+    <ClCompile Include="ImageAlgorithm\ImageCorrectionDarkGainRef.hpp">
       <Filter>ImageAlgorithm</Filter>
     </ClCompile>
   </ItemGroup>
@@ -284,6 +284,9 @@
       <Filter>ImageAlgorithm</Filter>
     </ClInclude>
     <ClInclude Include="ImageAlgorithm\ImageMorphologyClose.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageCorrectionCrossCorrelationNormal.hpp">
       <Filter>ImageAlgorithm</Filter>
     </ClInclude>
   </ItemGroup>
