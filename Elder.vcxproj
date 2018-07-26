@@ -146,7 +146,6 @@
     <ClInclude Include="ImageAlgorithm\ImageAlgorithmBase.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageBadPixelCorrection.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageCorrectionBase.hpp" />
-    <ClInclude Include="ImageAlgorithm\ImageCorrectionCrossCorrelationNormal.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageFFT.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageFilterBase.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageFilterBilateral.hpp" />
