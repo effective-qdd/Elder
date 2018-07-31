@@ -526,10 +526,7 @@ namespace ELDER
 				TIFFSetField(tiff, TIFFTAG_YRESOLUTION, 96);
 
 				auto data = image->Data();
-				for (int i = 0; i < image->Height(); ++i)
-				{
-					TIFFWriteEncodedStrip(tiff, i, data + image->WidthBytes() * i, image->Width());
-				}
+				TIFFWriteEncodedStrip(tiff, 0, data, image->WidthBytes() * image->Height());
 
 				TIFFClose(tiff);
 				tiff = nullptr;
@@ -571,12 +568,9 @@ namespace ELDER
 				TIFFSetField(tiff, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
 				TIFFSetField(tiff, TIFFTAG_XRESOLUTION, 96);
 				TIFFSetField(tiff, TIFFTAG_YRESOLUTION, 96);
-				auto data = image->Data();
-				for (int i = 0; i < image->Height(); ++i)
-				{
-					TIFFWriteEncodedStrip(tiff, i, data + image->WidthBytes() * i, image->Width());
-				}
 				
+				auto data = image->Data();
+				TIFFWriteEncodedStrip(tiff, 0, data, image->WidthBytes() * image->Height());
 
 				TIFFClose(tiff);
 				tiff = nullptr;
@@ -620,10 +614,7 @@ namespace ELDER
 				TIFFSetField(tiff, TIFFTAG_YRESOLUTION, 96);
 
 				auto data = image->Data();
-				for (int i = 0; i < image->Height(); ++i)
-				{
-					TIFFWriteEncodedStrip(tiff, i, data + image->WidthBytes() * i, image->Width());
-				}
+				TIFFWriteEncodedStrip(tiff, 0, data, image->WidthBytes() * image->Height());
 
 				TIFFClose(tiff);
 				tiff = nullptr;

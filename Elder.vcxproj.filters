@@ -286,5 +286,8 @@
     <ClInclude Include="ImageAlgorithm\ImageMorphologyClose.hpp">
       <Filter>ImageAlgorithm</Filter>
     </ClInclude>
+    <ClInclude Include="ImageAlgorithm\ImageFilterSobel.hpp">
+      <Filter>ImageAlgorithm</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

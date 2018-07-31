@@ -12,7 +12,6 @@
 #ifndef _IMAGE_IPP_H
 #define _IMAGE_IPP_H
 
-
 // Links
 #pragma comment(lib, "ippsmt.lib")
 #pragma comment(lib, "ippvmmt.lib")
@@ -20,14 +19,11 @@
 #pragma comment(lib, "ippimt.lib")
 #pragma comment(lib, "ippcvmt.lib")
 
-
 // System Class Includes
 #include <ipp.h>
 
-
 // My Class Includes
 #include "ImageBase.hpp"
-
 
 namespace ELDER
 {

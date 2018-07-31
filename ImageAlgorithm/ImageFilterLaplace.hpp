@@ -15,6 +15,8 @@
 // My Class Includes
 #include "ImageFilterBase.hpp"
 #include "../ImageOperator/ImageConvert.hpp"
+#include "../ImageOperator/ImageSubConstant.hpp"
+#include "../ImageOperator/ImageMulConstant.hpp"
 
 namespace ELDER
 {
@@ -143,9 +145,26 @@ namespace ELDER
 					: CLaplace()
 					, m_srcImage32f1c(std::make_shared<CImage32f1cIPPI>())
 					, m_dstImage32f1c(std::make_shared<CImage32f1cIPPI>())
+					, m_srcBuf16s1c(nullptr)
+					, m_dstBuf16s1c(nullptr)
+					, m_srcBufWidthBytes(0)
+					, m_dstBufWidthBytes(0)
 				{}
 
-				~CLaplace16u1c() = default;
+				~CLaplace16u1c()
+				{
+					if (m_srcBuf16s1c != nullptr)
+					{
+						ippFree(m_srcBuf16s1c);
+						m_srcBuf16s1c = nullptr;
+					}
+
+					if (m_dstBuf16s1c != nullptr)
+					{
+						ippFree(m_dstBuf16s1c);
+						m_dstBuf16s1c = nullptr;
+					}
+				}
 
 				void Initialize(Size imageSize, int maskSize)
 				{
@@ -179,6 +198,12 @@ namespace ELDER
 
 						m_srcImage32f1c->Initialize(m_imageSize.width, m_imageSize.height);
 						m_dstImage32f1c->Initialize(m_imageSize.width, m_imageSize.height);
+						
+						if (m_srcBuf16s1c != nullptr) ippsFree(m_srcBuf16s1c);
+						m_srcBuf16s1c = ippiMalloc_16s_C1(m_imageSize.width, m_imageSize.height, &m_srcBufWidthBytes);
+
+						if (m_dstBuf16s1c != nullptr) ippsFree(m_dstBuf16s1c);
+						m_dstBuf16s1c = ippiMalloc_16s_C1(m_imageSize.width, m_imageSize.height, &m_dstBufWidthBytes);
 					}
 				}
 
@@ -196,6 +221,16 @@ namespace ELDER
 					ASSERT_LOG(m_imageSize.height == dst->Height(), "m_imageSize.height != dst->Height()");
 
 					std::lock_guard<std::mutex> lock(m_mutex);
+// 					ippiConvert_16u16s_C1RSfs
+// 					(
+// 						src->Data(),
+// 						src->WidthBytes(),
+// 						m_srcBuf16s1c,
+// 						m_srcBufWidthBytes,
+// 						{ m_imageSize.width, m_imageSize.height },
+// 						ippRndZero,
+// 						0
+// 					);
 					OPERATOR::CImageConvert<OPERATOR::CConvert16u1cTo32f1c>::Convert(src, m_srcImage32f1c);
 					auto status = ippiFilterLaplaceBorder_32f_C1R
 					(
@@ -210,7 +245,36 @@ namespace ELDER
 						m_buf8u
 					);
 					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterLaplaceBorder_32f_C1R failed!");
+// 					ippiConvert_16s16u_C1Rs
+// 					(
+// 						m_srcBuf16s1c,
+// 						m_srcBufWidthBytes,
+// 						dst->Data(),
+// 						dst->WidthBytes(),
+// 						{ m_imageSize.width, m_imageSize.height }
+// 					);
+
+					float min = 0.0f;
+					float max = 0.0f;
+					status = ippiMinMax_32f_C1R
+					(
+						m_dstImage32f1c->Data(),
+						m_dstImage32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height },
+						&min,
+						&max
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiMinMax_32f_C1R failed!");
+					
+					if (abs(max - min) > kEpsinon32)
+					{
+						auto k = (65535.0f - 0.0f) / (max - min);
+						OPERATOR::CImageSubConstant<OPERATOR::CSubConstant32f1c>::SubConstant(m_dstImage32f1c, min);
+						OPERATOR::CImageMulConstant<OPERATOR::CMulConstant32f1c>::MulConstant(m_dstImage32f1c, k);
+					}
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
+
+					//OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
 
 					return true;
 				}
@@ -218,6 +282,10 @@ namespace ELDER
 			private:
 				std::shared_ptr<CImage32f1cIPPI> m_srcImage32f1c;
 				std::shared_ptr<CImage32f1cIPPI> m_dstImage32f1c;
+				Ipp16s* m_srcBuf16s1c;
+				Ipp16s* m_dstBuf16s1c;
+				int m_srcBufWidthBytes;
+				int m_dstBufWidthBytes;
 			};
 
 

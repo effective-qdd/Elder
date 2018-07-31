@@ -157,6 +157,7 @@
     <ClInclude Include="ImageAlgorithm\ImageFilterMean.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageFilterMedian.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageFilterMinimum.hpp" />
+    <ClInclude Include="ImageAlgorithm\ImageFilterSobel.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageIntensityAccumulation.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageIntensityAverage.hpp" />
     <ClInclude Include="ImageAlgorithm\ImageIntensityBase.hpp" />

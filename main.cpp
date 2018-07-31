@@ -13,6 +13,10 @@
 #include "ImageOperator/ImageAdd.hpp"
 #include "ImageOperator/ImageSub.hpp"
 
+#include <opencv2/core/core.hpp>
+
+#pragma comment(lib, "opencv_world341d.lib")
+
 int main()
 {
 // 	Ipp8u *data = ippsMalloc_8u(1023 * 1023);
@@ -27,29 +31,34 @@ int main()
 // 		&max
 // 	);
 // 	std::cout << (int)max << std::endl;
+	
 
-	using Image8 = ELDER::CImage<ELDER::CIDT8U, ELDER::CICH1, ELDER::CImageIPPI>;
-	using Image16 = ELDER::CImage<ELDER::CIDT16U, ELDER::CICH1, ELDER::CImageIPPI>;
-
+ 	using Image8 = ELDER::CImage<ELDER::CIDT8U, ELDER::CICH1, ELDER::CImageIPPI>;
+// 	using Image16 = ELDER::CImage<ELDER::CIDT16U, ELDER::CICH1, ELDER::CImageIPPI>;
+ 
 	Image8 img1;
-	img1.Initialize(512, 512);
-
-	Image8 img2;
-	img2.Initialize(512, 512);
-
-	unsigned char * buf = new unsigned char[512 * 512];
-	memset(buf, 1, 512 * 512);
-	ELDER::CImage8u1cIPPI *image3 = new ELDER::CImage8u1cIPPI;
-	image3->Initialize(512, 512, buf);
-
-	ELDER::CImage8u1cIPPI *image4 = new ELDER::CImage8u1cIPPI;
-	image4->Initialize(512, 512);
-
-
-	ELDER::OPERATOR::CImageAdd<ELDER::OPERATOR::CAdd8u1c>::Add(image4, image3);
-
-	auto m = ELDER::OPERATOR::CImageMax<ELDER::OPERATOR::CMax8u1c>::Max(image4);
-	std::cout << (int)m << std::endl;
+	img1.Initialize(1023, 1024);
+	cv::Mat m(img1.Height(), img1.Width(), CV_8UC1, img1.Data(), img1.WidthBytes());
+	std::cout << "Mat width = " << m.cols << std::endl;
+	std::cout << "Mat height = " << m.rows << std::endl;
+	std::cout << "Mat step = " << m.step << std::endl;
+// 
+// 	Image8 img2;
+// 	img2.Initialize(512, 512);
+// 
+// 	unsigned char * buf = new unsigned char[512 * 512];
+// 	memset(buf, 1, 512 * 512);
+// 	ELDER::CImage8u1cIPPI *image3 = new ELDER::CImage8u1cIPPI;
+// 	image3->Initialize(512, 512, buf);
+// 
+// 	ELDER::CImage8u1cIPPI *image4 = new ELDER::CImage8u1cIPPI;
+// 	image4->Initialize(512, 512);
+// 
+// 
+// 	ELDER::OPERATOR::CImageAdd<ELDER::OPERATOR::CAdd8u1c>::Add(image4, image3);
+// 
+// 	auto m = ELDER::OPERATOR::CImageMax<ELDER::OPERATOR::CMax8u1c>::Max(image4);
+// 	std::cout << (int)m << std::endl;
 	
 	int i;
 	std::cin >> i;
