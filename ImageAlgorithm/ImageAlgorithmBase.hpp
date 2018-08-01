@@ -17,6 +17,9 @@
 #include <mutex>
 #include <any>
 
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+
 // My Class Includes
 #include "../Image/Image.hpp"
 

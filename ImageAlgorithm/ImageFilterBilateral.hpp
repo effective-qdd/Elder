@@ -29,38 +29,49 @@ namespace ELDER
 				CBilateral()
 					: IFilter()
 					, m_imageSize{ 0, 0 }
-					, m_spec(nullptr)
-					, m_buf8u(nullptr)
+					, m_radius(0)
+					, m_sigmaColor(0)
+					, m_sigmaSpace(0)
 				{}
 
 				/// \brief Free buffer for all subclass.
 				virtual ~CBilateral()
 				{
-					if (m_spec != nullptr)
-					{
-						ippFree(m_spec);
-						m_spec = nullptr;
-					}
-					if (m_buf8u != nullptr)
-					{
-						ippsFree(m_buf8u);
-						m_buf8u = nullptr;
-					}
+					
 				}
 
 				/// \brief Initialize CBilateral params.
 				/// \warning Border value is applicable only to the kConst border type.
 				virtual void Initialize(Size imageSize)
 				{
+					if (m_imageSize != imageSize)
+					{
+						m_imageSize = imageSize;
+					}
+				}
 
+				virtual void SetRadius(int radius)
+				{
+					m_radius = radius;
+				}
+
+				virtual void SetSigmaColor(double sigmaColor)
+				{
+					m_sigmaColor = sigmaColor;
+				}
+
+				virtual void SetSigmaSpace(double sigmaSpace)
+				{
+					m_sigmaSpace = sigmaSpace;
 				}
 
 				virtual bool Apply(std::any const&, std::any const&) { return true; };
 
 			protected:
 				Size						m_imageSize;
-				IppiFilterBilateralSpec*	m_spec;
-				Ipp8u*						m_buf8u;
+				int							m_radius;
+				double						m_sigmaColor;
+				double						m_sigmaSpace;
 				std::mutex					m_mutex;
 			};
 
@@ -77,46 +88,7 @@ namespace ELDER
 
 				void Initialize(Size imageSize)
 				{
-					if (m_imageSize != imageSize)
-					{
-						m_imageSize = imageSize;
-						
-						int specSize = 0;
-						int bufferSize = 0;
-						auto status = ippiFilterBilateralBorderGetBufferSize
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp8u,
-							1,
-							ippDistNormL1,
-							&specSize,
-							&bufferSize
-						);
-						ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorderGetBufferSize failed!");
-
-						if (m_spec != nullptr) ippFree(m_spec);
-						m_spec = (IppiFilterBilateralSpec*)ippMalloc(specSize);
-						ENSURE_THROW_MSG(m_spec != nullptr, "ippMalloc failed!");
-
-						if (m_buf8u != nullptr) ippsFree(m_buf8u);
-						m_buf8u = ippsMalloc_8u(bufferSize);
-						ENSURE_THROW_MSG(m_buf8u != nullptr, "ippsMalloc_8u failed!");
-
-						status = ippiFilterBilateralBorderInit
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp8u,
-							1,
-							ippDistNormL1,
-							400.0f,
-							100.0f,
-							m_spec
-						);
-					}					
+					CBilateral::Initialize(imageSize);
 				}
 
 				bool Apply(std::any const& imageIn, std::any const& imageOut) override
@@ -133,20 +105,23 @@ namespace ELDER
 					ASSERT_LOG(m_imageSize.height == dst->Height(), "m_imageSize.height != dst->Height()");
 
 					std::lock_guard<std::mutex> lock(m_mutex);
-					Ipp8u borderValue = 0;
-					auto status = ippiFilterBilateralBorder_8u_C1R
-					(
-						src->Data()/* + src->WidthBytes()*/,
-						src->WidthBytes(),
-						dst->Data(),
-						dst->WidthBytes(),
-						{ m_imageSize.width, m_imageSize.height },
-						static_cast<IppiBorderType>(ippBorderRepl | ippBorderInMemTop | ippBorderInMemRight),
-						&borderValue,
-						m_spec,
-						m_buf8u
-					);
-					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorder_8u_C1R failed!");
+					try
+					{
+						cv::Mat srcMat(src->Height(), src->Width(), CV_8UC1, src->Data(), src->WidthBytes());
+						cv::Mat dstMat(dst->Height(), dst->Width(), CV_8UC1, dst->Data(), dst->WidthBytes());
+						cv::bilateralFilter
+						(
+							srcMat,
+							dstMat,
+							m_radius,
+							m_sigmaColor,
+							m_sigmaSpace
+						);
+					}
+					catch (std::exception)
+					{
+						THROW_MSG("bilateralFilter failed!")
+					}
 
 					return true;
 				}
@@ -171,42 +146,6 @@ namespace ELDER
 					{
 						m_imageSize = imageSize;
 
-						int specSize = 0;
-						int bufferSize = 0;
-						auto status = ippiFilterBilateralBorderGetBufferSize
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp32f,
-							1,
-							ippDistNormL1,
-							&specSize,
-							&bufferSize
-						);
-						ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorderGetBufferSize failed!");
-
-						if (m_spec != nullptr) ippFree(m_spec);
-						m_spec = (IppiFilterBilateralSpec*)ippMalloc(specSize);
-						ENSURE_THROW_MSG(m_spec != nullptr, "ippMalloc failed!");
-
-						if (m_buf8u != nullptr) ippsFree(m_buf8u);
-						m_buf8u = ippsMalloc_8u(bufferSize);
-						ENSURE_THROW_MSG(m_buf8u != nullptr, "ippsMalloc_8u failed!");
-
-						status = ippiFilterBilateralBorderInit
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp32f,
-							1,
-							ippDistNormL1,
-							400.0f,
-							100.0f,
-							m_spec
-						);
-
 						m_srcImage32f1c->Initialize(m_imageSize.width, m_imageSize.height);
 						m_dstImage32f1c->Initialize(m_imageSize.width, m_imageSize.height);
 					}
@@ -227,20 +166,24 @@ namespace ELDER
 
 					std::lock_guard<std::mutex> lock(m_mutex);
 					OPERATOR::CImageConvert<OPERATOR::CConvert16u1cTo32f1c>::Convert(src, m_srcImage32f1c);
-					Ipp32f borderValue = 0.0f;
-					auto status = ippiFilterBilateralBorder_32f_C1R
-					(
-						m_srcImage32f1c->Data()/* + m_srcImage32f1c->WidthBytes()*/,
-						m_srcImage32f1c->WidthBytes(),
-						m_dstImage32f1c->Data(),
-						m_dstImage32f1c->WidthBytes(),
-						{ m_imageSize.width, m_imageSize.height },
-						static_cast<IppiBorderType>(ippBorderRepl | ippBorderInMemTop | ippBorderInMemRight),
-						&borderValue,
-						m_spec,
-						m_buf8u
-					);
-					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorder_32f_C1R failed!");
+					try
+					{
+						cv::Mat srcMat(m_srcImage32f1c->Height(), m_srcImage32f1c->Width(), CV_32FC1, m_srcImage32f1c->Data(), m_srcImage32f1c->WidthBytes());
+						cv::Mat dstMat(m_dstImage32f1c->Height(), m_dstImage32f1c->Width(), CV_32FC1, m_dstImage32f1c->Data(), m_dstImage32f1c->WidthBytes());
+						cv::bilateralFilter
+						(
+							srcMat,
+							dstMat,
+							m_radius,
+							m_sigmaColor,
+							m_sigmaSpace
+						);
+					}
+					catch (std::exception)
+					{
+						THROW_MSG("bilateralFilter failed!")
+					}
+					
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
 
 					return true;
@@ -264,46 +207,7 @@ namespace ELDER
 
 				void Initialize(Size imageSize)
 				{
-					if (m_imageSize != imageSize)
-					{
-						m_imageSize = imageSize;
-
-						int specSize = 0;
-						int bufferSize = 0;
-						auto status = ippiFilterBilateralBorderGetBufferSize
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp32f,
-							1,
-							ippDistNormL1,
-							&specSize,
-							&bufferSize
-						);
-						ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorderGetBufferSize failed!");
-
-						if (m_spec != nullptr) ippFree(m_spec);
-						m_spec = (IppiFilterBilateralSpec*)ippMalloc(specSize);
-						ENSURE_THROW_MSG(m_spec != nullptr, "ippMalloc failed!");
-
-						if (m_buf8u != nullptr) ippsFree(m_buf8u);
-						m_buf8u = ippsMalloc_8u(bufferSize);
-						ENSURE_THROW_MSG(m_buf8u != nullptr, "ippsMalloc_8u failed!");
-
-						status = ippiFilterBilateralBorderInit
-						(
-							ippiFilterBilateralGauss,
-							{ m_imageSize.width, m_imageSize.height },
-							1,
-							ipp32f,
-							1,
-							ippDistNormL1,
-							400.0f,
-							100.0f,
-							m_spec
-						);
-					}
+					CBilateral::Initialize(imageSize);
 				}
 
 				bool Apply(std::any const& imageIn, std::any const& imageOut) override
@@ -320,20 +224,23 @@ namespace ELDER
 					ASSERT_LOG(m_imageSize.height == dst->Height(), "m_imageSize.height != dst->Height()");
 
 					std::lock_guard<std::mutex> lock(m_mutex);
-					Ipp32f borderValue = 0.0f;
-					auto status = ippiFilterBilateralBorder_32f_C1R
-					(
-						src->Data() + src->WidthBytes(),
-						src->WidthBytes(),
-						dst->Data(),
-						dst->WidthBytes(),
-						{ m_imageSize.width, m_imageSize.height },
-						static_cast<IppiBorderType>(ippBorderRepl | ippBorderInMemTop | ippBorderInMemRight),
-						&borderValue,
-						m_spec,
-						m_buf8u
-					);
-					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterBilateralBorder_32f_C1R failed!");
+					try
+					{
+						cv::Mat srcMat(src->Height(), src->Width(), CV_32FC1, src->Data(), src->WidthBytes());
+						cv::Mat dstMat(dst->Height(), dst->Width(), CV_32FC1, dst->Data(), dst->WidthBytes());
+						cv::bilateralFilter
+						(
+							srcMat,
+							dstMat,
+							m_radius,
+							m_sigmaColor,
+							m_sigmaSpace
+						);
+					}
+					catch (std::exception)
+					{
+						THROW_MSG("bilateralFilter failed!")
+					}
 
 					return true;
 				}

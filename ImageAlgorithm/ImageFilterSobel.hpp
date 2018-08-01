@@ -71,6 +71,7 @@ namespace ELDER
 					: CSobel()
 					, m_tmpBuf16s1c(nullptr)
 					, m_tmpBufWidthBytes(0)
+					, m_tmpBuf32f1c(std::make_shared<CImage32f1cIPPI>())
 				{}
 
 				~CSobel8u1c()
@@ -114,6 +115,8 @@ namespace ELDER
 
 						if (m_tmpBuf16s1c != nullptr) ippsFree(m_tmpBuf16s1c);
 						m_tmpBuf16s1c = ippiMalloc_16s_C1(m_imageSize.width, m_imageSize.height, &m_tmpBufWidthBytes);
+
+						m_tmpBuf32f1c->Initialize(m_imageSize.width, m_imageSize.height);
 					}
 				}
 
@@ -146,16 +149,39 @@ namespace ELDER
 					);
 					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterSobel_8u16s_C1R failed!");
 
-					status = ippiScale_16s8u_C1R
+					status = ippiConvert_16s32f_C1R
 					(
 						m_tmpBuf16s1c,
 						m_tmpBufWidthBytes,
+						m_tmpBuf32f1c->Data(),
+						m_tmpBuf32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height }
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiConvert_16s32f_C1R failed!");
+
+					float min = 0.0f;
+					float max = 0.0f;
+					status = ippiMinMax_32f_C1R
+					(
+						m_tmpBuf32f1c->Data(),
+						m_tmpBuf32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height },
+						&min,
+						&max
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiMinMax_32f_C1R failed!");
+
+					status = ippiScale_32f8u_C1R
+					(
+						m_tmpBuf32f1c->Data(),
+						m_tmpBuf32f1c->WidthBytes(),
 						dst->Data(),
 						dst->WidthBytes(),
 						{ m_imageSize.width, m_imageSize.height },
-						ippAlgHintNone
+						min,
+						max
 					);
-					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiScale_16s8u_C1R failed!");
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiScale_32f8u_C1R failed!");
 
 					return true;
 				}
@@ -163,6 +189,7 @@ namespace ELDER
 			private:
 				Ipp16s* m_tmpBuf16s1c;
 				int m_tmpBufWidthBytes;
+				std::shared_ptr<CImage32f1cIPPI> m_tmpBuf32f1c;
 			};
 
 
