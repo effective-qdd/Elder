@@ -16,6 +16,8 @@
 // My Class Includes
 #include "ImageFilterBase.hpp"
 #include "../ImageOperator/ImageConvert.hpp"
+#include "../ImageOperator/ImageSubConstant.hpp"
+#include "../ImageOperator/ImageMulConstant.hpp"
 
 namespace ELDER
 {
@@ -205,6 +207,25 @@ namespace ELDER
 						m_buf8u
 					);
 					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterHipassBorder_32f_C1R failed!");
+					
+					float min = 0.0f;
+					float max = 0.0f;
+					status = ippiMinMax_32f_C1R
+					(
+						m_dstImage32f1c->Data(),
+						m_dstImage32f1c->WidthBytes(),
+						{ m_imageSize.width, m_imageSize.height },
+						&min,
+						&max
+					);
+					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiMinMax_32f_C1R failed!");
+
+					if (abs(max - min) > kEpsinon32)
+					{
+						auto k = (65535.0f - 0.0f) / (max - min);
+						OPERATOR::CImageSubConstant<OPERATOR::CSubConstant32f1c>::SubConstant(m_dstImage32f1c, min);
+						OPERATOR::CImageMulConstant<OPERATOR::CMulConstant32f1c>::MulConstant(m_dstImage32f1c, k);
+					}
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
 
 					return true;

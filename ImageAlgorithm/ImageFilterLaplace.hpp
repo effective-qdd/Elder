@@ -221,16 +221,6 @@ namespace ELDER
 					ASSERT_LOG(m_imageSize.height == dst->Height(), "m_imageSize.height != dst->Height()");
 
 					std::lock_guard<std::mutex> lock(m_mutex);
-// 					ippiConvert_16u16s_C1RSfs
-// 					(
-// 						src->Data(),
-// 						src->WidthBytes(),
-// 						m_srcBuf16s1c,
-// 						m_srcBufWidthBytes,
-// 						{ m_imageSize.width, m_imageSize.height },
-// 						ippRndZero,
-// 						0
-// 					);
 					OPERATOR::CImageConvert<OPERATOR::CConvert16u1cTo32f1c>::Convert(src, m_srcImage32f1c);
 					auto status = ippiFilterLaplaceBorder_32f_C1R
 					(
@@ -245,14 +235,6 @@ namespace ELDER
 						m_buf8u
 					);
 					ENSURE_THROW_MSG(status == ippStsNoErr, "ippiFilterLaplaceBorder_32f_C1R failed!");
-// 					ippiConvert_16s16u_C1Rs
-// 					(
-// 						m_srcBuf16s1c,
-// 						m_srcBufWidthBytes,
-// 						dst->Data(),
-// 						dst->WidthBytes(),
-// 						{ m_imageSize.width, m_imageSize.height }
-// 					);
 
 					float min = 0.0f;
 					float max = 0.0f;
@@ -273,8 +255,6 @@ namespace ELDER
 						OPERATOR::CImageMulConstant<OPERATOR::CMulConstant32f1c>::MulConstant(m_dstImage32f1c, k);
 					}
 					OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
-
-					//OPERATOR::CImageConvert<OPERATOR::CConvert32f1cTo16u1c>::Convert(m_dstImage32f1c, dst);
 
 					return true;
 				}
